@@ -36,10 +36,12 @@ resource "aws_instance" "example" {
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.instance-sg.id]
 
-  user_data = <<-EOF
-    #cloud-config
-    hostname: ${count.index == 0 ? var.sg_name : "node0${count.index}"}
-  EOF
+  # user_data = <<-EOF
+  #   #cloud-config
+  #   hostname: ${count.index == 0 ? var.sg_name : "node0${count.index}"}
+  # EOF
+
+  user_data = file("setup_script.sh")
 
 tags = {
     Name = count.index == 0 ? var.sg_name : "node0${count.index}"
